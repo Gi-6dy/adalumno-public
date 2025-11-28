@@ -21,4 +21,9 @@ class Alumno extends Model
     protected $casts = [
         'fecha_nacimiento' => 'date',
     ];
+
+    public function secciones()
+    {
+        return $this->belongsToMany(Seccion::class)->withTimestamps();
+    }
 }

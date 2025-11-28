@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Alumno;
+use App\Models\Seccion;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,15 +15,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::firstOrCreate(
             ['email' => 'admin@admin.com'],
             [
-                'name' => 'Admin',
+                'name' => 'admin',
                 'password' => Hash::make("admin"),
                 'email_verified_at' => now(),
             ]
         );
+
+        User::factory(10)->create();
+        Alumno::factory(10)->create();
+        Seccion::factory(10)->create();
     }
 }
