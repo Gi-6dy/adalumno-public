@@ -7,7 +7,7 @@
         <div class="user-info">
             <small>Usuario: <strong>{{ Auth::check() ? Auth::user()->name : 'Invitado' }}</strong></small>
         </div>
-        <h1>Editar Alumno</h1>
+        <h1>Editar alumno</h1>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -26,16 +26,13 @@
 
             <label for="codigo">Código</label>
             <input
-                type="text"
+                type="number"
                 id="codigo"
                 name="codigo"
                 value="{{ old('codigo', $alumno->codigo) }}"
                 required
-                minlength="9"
-                maxlength="20"
-                pattern="[0-9]{9,}"
-                inputmode="numeric"
-                title="El código debe contener solo dígitos y tener al menos 9 caracteres."
+                min="100000000"
+                title="El código debe ser un número de al menos 9 dígitos."
             >
             @error('codigo')
                 <p class="text-danger">{{ $message }}</p>
@@ -50,14 +47,14 @@
                 required
                 minlength="3"
                 maxlength="255"
-                title="El nombre solo puede incluir letras, espacios, apóstrofes o guiones."
+                title="El nombre debe tener entre 3 y 255 caracteres."
             >
             @error('nombre')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
 
             <label for="correo">Correo</label>
-            <input type="email" id="correo" name="correo" value="{{ old('correo', $alumno->correo) }}" required>
+            <input type="email" id="correo" name="correo" value="{{ old('correo', $alumno->correo) }}" required maxlength="255">
             @error('correo')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -69,7 +66,12 @@
             @enderror
 
             <label for="sexo">Sexo</label>
-            <input type="text" id="sexo" name="sexo" value="{{ old('sexo', $alumno->sexo) }}" required>
+            <select id="sexo" name="sexo" required>
+                <option value="">Seleccionar...</option>
+                <option value="Masculino" {{ old('sexo', $alumno->sexo) === 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                <option value="Femenino" {{ old('sexo', $alumno->sexo) === 'Femenino' ? 'selected' : '' }}>Femenino</option>
+                <option value="Otro" {{ old('sexo', $alumno->sexo) === 'Otro' ? 'selected' : '' }}>Otro</option>
+            </select>
             @error('sexo')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
