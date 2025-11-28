@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumno;
+use App\Enums\Carrera;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AlumnoController extends Controller
 {
@@ -67,13 +69,16 @@ class AlumnoController extends Controller
             $correoRule .= ',' . $alumnoId;
         }
 
+        // obtener los valores válidos del enum
+        $carreraValues = array_map(fn($c) => $c->value, Carrera::cases());
+
         return $request->validate([
-            'codigo' => ['required', 'string', 'regex:/^[0-9]{9,}$/'],
+            'codigo' => ['required', 'numeric', 'digits_between:9,20'],
             'nombre' => ['required', 'string', 'max:255', 'regex:/^[\p{L}\s\'\-]+$/u'],
             'correo' => ['required', 'email', 'max:255', $correoRule],
             'fecha_nacimiento' => ['required', 'date', 'before:today'],
             'sexo' => ['required', 'string', 'max:10'],
-            'carrera' => ['required', 'string', 'alpha', 'min:3', 'max:4'],
+            'carrera' => ['required', Rule::in($carreraValues)],
         ]);
     }
 }

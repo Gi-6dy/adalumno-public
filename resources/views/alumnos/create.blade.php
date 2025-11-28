@@ -76,17 +76,14 @@
             @enderror
 
             <label for="carrera">Carrera</label>
-            <input
-                type="text"
-                id="carrera"
-                name="carrera"
-                value="{{ old('carrera') }}"
-                required
-                minlength="3"
-                maxlength="4"
-                pattern="[A-Za-z]{3,4}"
-                title="La carrera debe contener entre 3 y 4 letras."
-            >
+            <select id="carrera" name="carrera" required>
+                <option value="">Seleccionar...</option>
+                @foreach(\App\Enums\Carrera::cases() as $c)
+                    <option value="{{ $c->value }}" {{ old('carrera') === $c->value ? 'selected' : '' }}>
+                        {{ $c->value }}
+                    </option>
+                @endforeach
+            </select>
             @error('carrera')
                 <p class="text-danger">{{ $message }}</p>
             @enderror

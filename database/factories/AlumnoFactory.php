@@ -24,12 +24,12 @@ class AlumnoFactory extends Factory
             'fecha_nacimiento' => $this->faker->dateTimeBetween('-30 years', '-18 years'),
             'sexo' => $this->faker->randomElement(['Masculino', 'Femenino']),
             'carrera' => $this->faker->randomElement([
-                'Ingeniería en computación',
-                'Administración',
-                'Negocios internacionales',
-                'Diseño gráfico',
-                'Derecho',
-                'Enfermería',
+                'ICOM',
+                'LIAD',
+                'LINI',
+                'LDCG',
+                'DECH',
+                'ENFE',
             ]),
         ];
     }

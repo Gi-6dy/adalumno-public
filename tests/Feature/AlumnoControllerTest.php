@@ -82,12 +82,12 @@ class AlumnoControllerTest extends TestCase
         $this->signIn();
 
         $data = [
-            'codigo' => '123456789',
+            'codigo' => 123456789, // usar entero
             'nombre' => 'Juan Perez',
             'correo' => 'juan.perez@example.com',
             'fecha_nacimiento' => '2000-01-15',
             'sexo' => 'Masculino',
-            'carrera' => 'SIST',
+            'carrera' => 'ICOM', // valor válido del enum
         ];
 
         $response = $this->post(route('alumnos.store'), $data);
@@ -108,21 +108,21 @@ class AlumnoControllerTest extends TestCase
         $this->signIn();
 
         $alumno = Alumno::factory()->create([
-            'codigo' => '987654321',
+            'codigo' => 987654321,
             'nombre' => 'Maria Lopez',
             'correo' => 'maria.lopez@example.com',
             'fecha_nacimiento' => '1999-03-21',
             'sexo' => 'Femenino',
-            'carrera' => 'CONT',
+            'carrera' => 'LIAD',
         ]);
 
         $updates = [
-            'codigo' => '987654321',
+            'codigo' => 987654321,
             'nombre' => 'Maria Gomez',
             'correo' => 'maria.gomez@example.com',
             'fecha_nacimiento' => '1998-12-10',
             'sexo' => 'Femenino',
-            'carrera' => 'MECN',
+            'carrera' => 'ENFE', // valor válido del enum
         ];
 
         $response = $this->put(route('alumnos.update', $alumno), $updates);
@@ -132,12 +132,12 @@ class AlumnoControllerTest extends TestCase
 
         $alumno->refresh();
 
-        $this->assertSame($updates['codigo'], $alumno->codigo);
+        $this->assertEquals($updates['codigo'], $alumno->codigo); // no strict para evitar mismatch de tipo
         $this->assertSame($updates['nombre'], $alumno->nombre);
         $this->assertSame($updates['correo'], $alumno->correo);
         $this->assertSame($updates['fecha_nacimiento'], $alumno->fecha_nacimiento->toDateString());
         $this->assertSame($updates['sexo'], $alumno->sexo);
-        $this->assertSame($updates['carrera'], $alumno->carrera);
+        $this->assertSame($updates['carrera'], $alumno->carrera->value); // carrera casteada a enum
 
         $this->assertDatabaseHas('alumnos', [
             'id' => $alumno->id,
@@ -150,12 +150,12 @@ class AlumnoControllerTest extends TestCase
         $this->signIn();
 
         $alumno = Alumno::factory()->create([
-            'codigo' => '111222333',
+            'codigo' => 111222333,
             'nombre' => 'Carlos Ruiz',
             'correo' => 'carlos.ruiz@example.com',
             'fecha_nacimiento' => '1997-07-07',
             'sexo' => 'Masculino',
-            'carrera' => 'INDU',
+            'carrera' => 'LINI',
         ]);
 
         $response = $this->delete(route('alumnos.destroy', $alumno));
