@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
+    <div class="user-info">
+        <small>Usuario: <strong>{{ Auth::check() ? Auth::user()->name : 'Invitado' }}</strong></small>
+    </div>
     <div class="row mb-4">
         <div class="col-md-8">
             <h1>{{ $seccion->seccion }}</h1>

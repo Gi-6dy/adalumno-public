@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
+    <div class="user-info">
+        <small>Usuario: <strong>{{ Auth::check() ? Auth::user()->name : 'Invitado' }}</strong></small>
+    </div>
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <h1>Editar Sección</h1>

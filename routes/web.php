@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\SeccionController;
+use App\Http\Controllers\TareaController;
 use App\Models\Alumno;
+use App\Models\Seccion;
+use App\Models\Tarea;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,9 +25,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $alumnos = Alumno::orderBy('nombre')
             ->get(['id', 'nombre', 'codigo', 'correo', 'carrera']);
+        $totalSecciones = Seccion::count();
+        $totalTareas = Tarea::count();
 
         return Inertia::render('dashboard', [
             'alumnos' => $alumnos,
+            'totalSecciones' => $totalSecciones,
+            'totalTareas' => $totalTareas,
         ]);
     })->name('dashboard');
 
@@ -34,6 +41,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::resource('secciones', SeccionController::class, [
     'parameters' => ['secciones' => 'seccion']
 ]);
+Route::resource('tareas', TareaController::class, [
+    'middleware' => ['auth'],
+    'except' => ['index', 'show']
+]);
+Route::resource('tareas', TareaController::class)->only(['index', 'show']);
 
 Route::post('secciones/{seccion}/inscribir-alumno', [SeccionController::class, 'inscribirAlumno'])
     ->name('secciones.inscribir-alumno');

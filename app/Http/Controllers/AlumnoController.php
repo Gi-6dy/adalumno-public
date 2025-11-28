@@ -9,7 +9,7 @@ class AlumnoController extends Controller
 {
     public function index()
     {
-        $alumnos = Alumno::orderBy('nombre')->paginate(10);
+        $alumnos = Alumno::orderBy('codigo')->paginate(10);
 
         return view('alumnos.index', compact('alumnos'));
     }

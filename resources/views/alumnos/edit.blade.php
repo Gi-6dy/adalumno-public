@@ -4,6 +4,9 @@
 
 @section('content')
     <div class="card">
+        <div class="user-info">
+            <small>Usuario: <strong>{{ Auth::check() ? Auth::user()->name : 'Invitado' }}</strong></small>
+        </div>
         <h1>Editar Alumno</h1>
 
         @if ($errors->any())

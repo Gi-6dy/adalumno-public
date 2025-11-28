@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
+    <div class="user-info">
+        <small>Usuario: <strong>{{ Auth::check() ? Auth::user()->name : 'Invitado' }}</strong></small>
+    </div>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Secciones</h1>
         <a href="{{ route('secciones.create') }}" class="btn btn-primary">Crear sección</a>
@@ -39,7 +42,6 @@
             </tbody>
         </table>
 
-        {{-- Si usas paginación --}}
         @if(method_exists($secciones, 'links'))
             {{ $secciones->links() }}
         @endif

@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Listado de alumnos')
+@php
+    use Illuminate\Support\Str;
+@endphp
+
+@section('title', 'Listado de Tareas')
 
 @section('content')
     <style>
@@ -154,51 +158,59 @@
         <div class="user-info">
             <small>Usuario: <strong>{{ Auth::check() ? Auth::user()->name : 'Invitado' }}</strong></small>
         </div>
-        <h1>Listado de Alumnos</h1>
+        <h1>Listado de tareas</h1>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <p>
-            <a href="{{ route('alumnos.create') }}">Crear alumno</a>
-        </p>
+        @auth
+            <p>
+                <a href="{{ route('tareas.create') }}">Crear tarea</a>
+            </p>
+        @endauth
 
         <table>
             <thead>
                 <tr>
-                    <th>Código</th>
+                    <th>ID</th>
                     <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Carrera</th>
+                    <th>Descripción</th>
+                    <th>Fecha de entrega</th>
+                    <th>Autor</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($alumnos as $alumno)
+                @forelse ($tareas as $tarea)
                     <tr>
-                        <td>{{ $alumno->codigo }}</td>
-                        <td>{{ $alumno->nombre }}</td>
-                        <td>{{ $alumno->correo }}</td>
-                        <td>{{ $alumno->carrera }}</td>
+                        <td>{{ $tarea->id }}</td>
+                        <td>{{ $tarea->nombre }}</td>
+                        <td>{{ Str::limit($tarea->descripcion, 80) }}</td>
+                        <td>{{ $tarea->fecha_entrega->format('Y-m-d') }}</td>
+                        <td>{{ $tarea->user?->name ?? 'Sin autor' }}</td>
                         <td class="actions">
-                            <a href="{{ route('alumnos.show', $alumno) }}">Ver</a>
-                            <a href="{{ route('alumnos.edit', $alumno) }}">Editar</a>
-                            <form action="{{ route('alumnos.destroy', $alumno) }}" method="POST" class="inline" onsubmit="return confirm('¿Deseas eliminar este alumno?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit">Eliminar</button>
-                            </form>
+                            <a href="{{ route('tareas.show', $tarea) }}">Ver</a>
+                            @can('update', $tarea)
+                                <a href="{{ route('tareas.edit', $tarea) }}">Editar</a>
+                            @endcan
+                            @can('delete', $tarea)
+                                <form action="{{ route('tareas.destroy', $tarea) }}" method="POST" class="inline" onsubmit="return confirm('Deseas eliminar esta tarea?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">Eliminar</button>
+                                </form>
+                            @endcan
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">No hay alumnos registrados.</td>
+                        <td colspan="5">No hay tareas registradas.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
-        {{ $alumnos->links() }}
+        {{ $tareas->links() }}
     </div>
 @endsection

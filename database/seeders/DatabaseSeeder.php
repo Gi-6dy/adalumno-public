@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Alumno;
 use App\Models\Seccion;
+use App\Models\Tarea;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,7 +26,8 @@ class DatabaseSeeder extends Seeder
         );
 
         User::factory(10)->create();
-        Alumno::factory(10)->create();
-        Seccion::factory(10)->create();
+        Alumno::factory(20)->create();
+        $this->call(SeccionSeeder::class);
+        $this->call(TareaSeeder::class);
     }
 }

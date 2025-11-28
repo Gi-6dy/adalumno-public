@@ -16,20 +16,20 @@ class AlumnoFactory extends Factory
     public function definition(): array
     {
         $nombre = $this->faker->name();
-        $codigo = Str::upper(Str::random(3)) . $this->faker->unique()->numberBetween(1000, 9999);
 
         return [
-            'codigo' => $codigo,
+            'codigo' => $this->faker->unique()->numberBetween(200000000, 299999999),
             'nombre' => $nombre,
             'correo' => $this->faker->unique()->safeEmail(),
             'fecha_nacimiento' => $this->faker->dateTimeBetween('-30 years', '-18 years'),
             'sexo' => $this->faker->randomElement(['Masculino', 'Femenino']),
             'carrera' => $this->faker->randomElement([
-                'Ingeniería en Sistemas',
+                'Ingeniería en computación',
                 'Administración',
-                'Marketing',
-                'Diseño Gráfico',
+                'Negocios internacionales',
+                'Diseño gráfico',
                 'Derecho',
+                'Enfermería',
             ]),
         ];
     }

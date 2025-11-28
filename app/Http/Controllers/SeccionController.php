@@ -45,7 +45,9 @@ class SeccionController extends Controller
      */
     public function show(Seccion $seccion)
     {
-        $alumnosDisponibles = Alumno::orderBy('nombre')->get();
+        $alumnosDisponibles = Alumno::whereDoesntHave('secciones', function ($query) use ($seccion) {
+            $query->where('seccion_id', $seccion->id);
+        })->orderBy('nombre')->get();
         return view('secciones.show', compact('seccion', 'alumnosDisponibles'));
     }
 

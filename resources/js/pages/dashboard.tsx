@@ -14,8 +14,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard() {
-    const { alumnos: alumnosList } = usePage<
-        SharedData & { alumnos: AlumnoSummary[] }
+    const { alumnos: alumnosList, totalSecciones, totalTareas } = usePage<
+        SharedData & {
+            alumnos: AlumnoSummary[];
+            totalSecciones: number;
+            totalTareas: number;
+        }
     >().props;
 
     const totalAlumnos = alumnosList.length;
@@ -37,19 +41,78 @@ export default function Dashboard() {
                             un solo lugar.
                         </p>
                     </div>
+                    <div className="rounded-2xl border border-sidebar-border/70 bg-gradient-to-br from-[#059669] via-[#047857] to-[#064e3b] p-6 text-white shadow-lg dark:border-sidebar-border">
+                        <span className="text-xs uppercase tracking-[0.3em] text-white/80">
+                            Total de secciones
+                        </span>
+                        <p className="mt-3 text-4xl font-semibold">
+                            {totalSecciones}
+                        </p>
+                        <p className="mt-6 text-sm text-white/70">
+                            Administra grupos y aulas para equilibrar la carga
+                            de estudiantes.
+                        </p>
+                    </div>
+                    <div className="rounded-2xl border border-sidebar-border/70 bg-gradient-to-br from-[#f97316] via-[#ea580c] to-[#7c2d12] p-6 text-white shadow-lg dark:border-sidebar-border">
+                        <span className="text-xs uppercase tracking-[0.3em] text-white/80">
+                            Total de tareas
+                        </span>
+                        <p className="mt-3 text-4xl font-semibold">
+                            {totalTareas}
+                        </p>
+                        <p className="mt-6 text-sm text-white/70">
+                            Supervisa asignaciones y da seguimiento oportuno
+                            a cada responsable.
+                        </p>
+                    </div>
                     <div className="rounded-2xl border border-sidebar-border/70 bg-card p-6 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-sidebar-border">
                         <h3 className="text-sm font-medium text-muted-foreground">
-                            Acciones rápidas
+                            Acciones rapidas
                         </h3>
-                        <div className="mt-4 flex flex-col gap-3">
-                            <Button asChild variant="outline">
-                                <Link href={alumnos.index().url}>Ver alumnos</Link>
-                            </Button>
-                            <Button asChild>
-                                <Link href={alumnos.create().url}>
-                                    Registrar alumno
-                                </Link>
-                            </Button>
+                        <div className="mt-4 space-y-5">
+                            <div className="space-y-2">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground/70">
+                                    Alumnos
+                                </p>
+                                <div className="flex flex-col gap-2">
+                                    <Button asChild variant="outline">
+                                        <Link href={alumnos.index().url}>
+                                            Ver alumnos
+                                        </Link>
+                                    </Button>
+                                    <Button asChild>
+                                        <Link href={alumnos.create().url}>
+                                            Registrar alumno
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground/70">
+                                    Secciones
+                                </p>
+                                <div className="flex flex-col gap-2">
+                                    <Button asChild variant="outline">
+                                        <a href="/secciones">Ver secciones</a>
+                                    </Button>
+                                    <Button asChild>
+                                        <a href="/secciones/create">Crear seccion</a>
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground/70">
+                                    Tareas
+                                </p>
+                                <div className="flex flex-col gap-2">
+                                    <Button asChild variant="outline">
+                                        <a href="/tareas">Ver tareas</a>
+                                    </Button>
+                                    <Button asChild>
+                                        <a href="/tareas/create">Crear tarea</a>
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="rounded-2xl border border-sidebar-border/70 bg-card p-6 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-sidebar-border">
@@ -58,12 +121,12 @@ export default function Dashboard() {
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm leading-6 text-muted-foreground">
                             <li>
-                                • Revisa los datos de contacto para asegurar una
-                                comunicación ágil.
+                                - Revisa los datos de contacto para asegurar una
+                                comunicacion agil.
                             </li>
                             <li>
-                                • Mantén la información académica actualizada
-                                para reportes confiables.
+                                - Mantener la informacion academica actualizada
+                                ayuda a generar reportes confiables.
                             </li>
                         </ul>
                     </div>
