@@ -9,7 +9,7 @@
         </div>
         <h1>Crear Tarea</h1>
 
-        <form action="{{ route('tareas.store') }}" method="POST">
+        <form action="{{ route('tareas.store') }}" method="POST" enctype="multipart/form-data">
             @include('tareas._form', ['submitLabel' => 'Crear'])
         </form>
     </div>

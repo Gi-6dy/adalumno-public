@@ -4,11 +4,10 @@
     use Illuminate\Support\Str;
 @endphp
 
-@section('title', 'Listado de Tareas')
+@section('title', 'Tareas eliminadas')
 
 @section('content')
     <style>
-        /* Contenedor de paginación: centrar y separar elementos */
         .pagination,
         nav[role="navigation"] ul.pagination {
             display: flex !important;
@@ -20,7 +19,6 @@
             align-items: center;
         }
 
-        /* Enlaces/elementos de la paginación (Bootstrap) */
         .pagination .page-item .page-link,
         .pagination a,
         .pagination span,
@@ -37,14 +35,12 @@
             font-size: 14px;
         }
 
-        /* Hover */
         .pagination a:hover,
         nav[role="navigation"] a:hover {
             background: #f1f5f9;
             border-color: #d3dce6;
         }
 
-        /* Estado activo */
         .pagination .active .page-link,
         .pagination .page-item.active .page-link,
         .pagination .active span,
@@ -55,7 +51,6 @@
             border-color: #0d6efd;
         }
 
-        /* Estado deshabilitado */
         .pagination .disabled .page-link,
         .pagination .page-item.disabled .page-link,
         .pagination .disabled span,
@@ -67,7 +62,6 @@
             opacity: 0.8;
         }
 
-        /* Ajustes para paginación generada con Tailwind (clases utilitarias) */
         nav[role="navigation"] .relative,
         nav[role="navigation"] .flex {
             display: flex;
@@ -75,7 +69,6 @@
             align-items: center;
         }
 
-        /* Asegura que íconos SVG no rompan la altura */
         nav[role="navigation"] svg {
             height: 1rem;
             width: 1rem;
@@ -158,20 +151,12 @@
         <div class="user-info">
             <small>Usuario: <strong>{{ Auth::check() ? Auth::user()->name : 'Invitado' }}</strong></small>
         </div>
-        <h1>Listado de tareas</h1>
 
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+        <h1>Tareas eliminadas</h1>
 
-        @auth
-            <p>
-                <a href="{{ route('tareas.create') }}">Crear tarea</a>
-            </p>
-            <p>
-                <a href="{{ route('tareas.trashed') }}">Ver tareas eliminadas</a>
-            </p>
-        @endauth
+        <p>
+            <a href="{{ route('tareas.index') }}">Volver al listado principal</a>
+        </p>
 
         <table>
             <thead>
@@ -181,7 +166,7 @@
                     <th>Descripción</th>
                     <th>Fecha de entrega</th>
                     <th>Autor</th>
-                    <th>Acciones</th>
+                    <th>Eliminada el</th>
                 </tr>
             </thead>
             <tbody>
@@ -190,25 +175,13 @@
                         <td>{{ $tarea->id }}</td>
                         <td>{{ $tarea->nombre }}</td>
                         <td>{{ Str::limit($tarea->descripcion, 80) }}</td>
-                        <td>{{ $tarea->fecha_entrega->format('Y-m-d') }}</td>
+                        <td>{{ optional($tarea->fecha_entrega)->format('Y-m-d') }}</td>
                         <td>{{ $tarea->user?->name ?? 'Sin autor' }}</td>
-                        <td class="actions">
-                            <a href="{{ route('tareas.show', $tarea) }}">Ver</a>
-                            @can('update', $tarea)
-                                <a href="{{ route('tareas.edit', $tarea) }}">Editar</a>
-                            @endcan
-                            @can('delete', $tarea)
-                                <form action="{{ route('tareas.destroy', $tarea) }}" method="POST" class="inline" onsubmit="return confirm('Deseas eliminar esta tarea?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit">Eliminar</button>
-                                </form>
-                            @endcan
-                        </td>
+                        <td>{{ optional($tarea->deleted_at)->format('Y-m-d H:i') }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">No hay tareas registradas.</td>
+                        <td colspan="6">No hay tareas eliminadas.</td>
                     </tr>
                 @endforelse
             </tbody>

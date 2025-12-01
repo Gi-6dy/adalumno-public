@@ -22,6 +22,7 @@ class TareaFactory extends Factory
             'nombre' => fake()->sentence(3),
             'descripcion' => fake()->paragraph(),
             'fecha_entrega' => fake()->dateTimeBetween('now', '+2 months')->format('Y-m-d'),
+            'adjunto' => null,
         ];
     }
 }

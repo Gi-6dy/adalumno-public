@@ -8,7 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Tarea;
+use App\Models\Alumno;
 
 class User extends Authenticatable
 {
@@ -23,6 +25,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'rol',
         'password',
     ];
 
@@ -55,5 +58,10 @@ class User extends Authenticatable
     public function tareas(): HasMany
     {
         return $this->hasMany(Tarea::class);
+    }
+
+    public function alumno(): HasOne
+    {
+        return $this->hasOne(Alumno::class);
     }
 }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Tarea;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class TareaSeeder extends Seeder
 {
@@ -25,7 +26,16 @@ class TareaSeeder extends Seeder
             Tarea::factory()
                 ->count(self::TAREAS_POR_USUARIO)
                 ->for($user)
-                ->create();
+                ->create()
+                ->each(function (Tarea $tarea) {
+                    $filename = 'tareas/seeded-tarea-' . $tarea->id . '.txt';
+
+                    Storage::disk('public')->put($filename, "Contenido de ejemplo para la tarea {$tarea->nombre}");
+
+                    $tarea->update([
+                        'adjunto' => $filename,
+                    ]);
+                });
         });
     }
 }

@@ -1,4 +1,6 @@
 @php
+    use Illuminate\Support\Facades\Storage;
+
     $tarea = $tarea ?? null;
 @endphp
 
@@ -48,6 +50,25 @@
     required
 >
 @error('fecha_entrega')
+    <p class="text-danger">{{ $message }}</p>
+@enderror
+
+<label for="adjunto">Adjunto (PDF, ZIP, DOCX o TXT)</label>
+<input
+    type="file"
+    id="adjunto"
+    name="adjunto"
+    accept=".pdf,.zip,.docx,.txt"
+>
+@if ($tarea && $tarea->adjunto)
+    <p>
+        Archivo actual:
+        <a href="{{ Storage::url($tarea->adjunto) }}" target="_blank" rel="noopener">
+            Descargar adjunto
+        </a>
+    </p>
+@endif
+@error('adjunto')
     <p class="text-danger">{{ $message }}</p>
 @enderror
 

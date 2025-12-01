@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('title', 'Detalle de tarea')
 
 @section('content')
@@ -16,6 +20,15 @@
         <p><strong>Descripcion:</strong> {{ $tarea->descripcion }}</p>
         <p><strong>Fecha de entrega:</strong> {{ $tarea->fecha_entrega->format('Y-m-d') }}</p>
         <p><strong>Autor:</strong> {{ $tarea->user?->name ?? 'Sin autor' }}</p>
+
+        @if ($tarea->adjunto)
+            <p>
+                <strong>Adjunto:</strong>
+                <a href="{{ Storage::url($tarea->adjunto) }}" target="_blank" rel="noopener">
+                    Descargar archivo
+                </a>
+            </p>
+        @endif
 
         <p>
             <a href="{{ route('tareas.index') }}">Volver al listado</a>

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TareaCreada;
 use App\Models\Tarea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class TareaController extends Controller
 {
@@ -12,9 +15,27 @@ class TareaController extends Controller
      */
     public function index()
     {
-        $tareas = Tarea::with('user')->latest()->paginate(10);
+        $tareas = Tarea::query()
+            ->withoutTrashed()
+            ->with('user')
+            ->latest()
+            ->paginate(10);
 
         return view('tareas.index', compact('tareas'));
+    }
+
+    public function trashed(Request $request)
+    {
+        if (! $request->user() || $request->user()->name !== 'admin') {
+            abort(403);
+        }
+
+        $tareas = Tarea::onlyTrashed()
+            ->with('user')
+            ->latest('deleted_at')
+            ->paginate(10);
+
+        return view('tareas.trashed', compact('tareas'));
     }
 
     /**
@@ -35,8 +56,11 @@ class TareaController extends Controller
         $this->authorize('create', Tarea::class);
 
         $data = $this->validateData($request);
+        $this->uploadAdjunto($data);
 
         $tarea = $request->user()->tareas()->create($data);
+
+        $this->enviarConfirmacion($tarea);
 
         return redirect()
             ->route('tareas.show', $tarea)
@@ -69,6 +93,7 @@ class TareaController extends Controller
         $this->authorize('update', $tarea);
 
         $data = $this->validateData($request);
+        $this->uploadAdjunto($data, $tarea->adjunto);
 
         $tarea->update($data);
 
@@ -97,6 +122,39 @@ class TareaController extends Controller
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['required', 'string'],
             'fecha_entrega' => ['required', 'date'],
+            'adjunto' => ['nullable', 'file', 'mimes:pdf,zip,docx,txt'],
         ]);
+    }
+
+    private function uploadAdjunto(array &$data, ?string $previousPath = null): void
+    {
+        if (! array_key_exists('adjunto', $data)) {
+            return;
+        }
+
+        if ($previousPath) {
+            Storage::disk('public')->delete($previousPath);
+        }
+
+        $data['adjunto'] = $data['adjunto']->store('tareas', 'public');
+    }
+
+    private function enviarConfirmacion(Tarea $tarea): void
+    {
+        $tarea->loadMissing('user.alumno');
+
+        $user = $tarea->user;
+
+        if (! $user) {
+            return;
+        }
+
+        $correo = $user->email ?: ($user->alumno->correo ?? null);
+
+        if (! $correo) {
+            return;
+        }
+
+        Mail::to($correo)->send(new TareaCreada($tarea));
     }
 }

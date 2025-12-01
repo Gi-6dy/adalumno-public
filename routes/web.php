@@ -45,6 +45,9 @@ Route::resource('tareas', TareaController::class, [
     'middleware' => ['auth'],
     'except' => ['index', 'show']
 ]);
+Route::get('tareas/eliminadas', [TareaController::class, 'trashed'])
+    ->middleware('auth')
+    ->name('tareas.trashed');
 Route::resource('tareas', TareaController::class)->only(['index', 'show']);
 
 Route::post('secciones/{seccion}/inscribir-alumno', [SeccionController::class, 'inscribirAlumno'])

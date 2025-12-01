@@ -58,6 +58,19 @@
                 <p class="text-danger">{{ $message }}</p>
             @enderror
 
+            <label for="user_id">Usuario asociado</label>
+            <select id="user_id" name="user_id">
+                <option value="">Sin usuario</option>
+                @foreach($users as $user)
+                    <option value="{{ $user->id }}" {{ (string) old('user_id') === (string) $user->id ? 'selected' : '' }}>
+                        {{ $user->name }} ({{ $user->email }})
+                    </option>
+                @endforeach
+            </select>
+            @error('user_id')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+
             <label for="fecha_nacimiento">Fecha de nacimiento</label>
             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}" required>
             @error('fecha_nacimiento')

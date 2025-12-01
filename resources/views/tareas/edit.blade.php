@@ -9,7 +9,7 @@
         </div>
         <h1>Editar Tarea</h1>
 
-        <form action="{{ route('tareas.update', $tarea) }}" method="POST">
+        <form action="{{ route('tareas.update', $tarea) }}" method="POST" enctype="multipart/form-data">
             @method('PUT')
             @include('tareas._form', ['submitLabel' => 'Actualizar', 'tarea' => $tarea])
         </form>
